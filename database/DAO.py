@@ -1,4 +1,5 @@
 from database.DB_connect import DBConnect
+from model.squadra import Squadra
 
 
 class DAO():
@@ -6,38 +7,45 @@ class DAO():
         pass
 
     @staticmethod
-    def getAllBrands():
+    def getYears():
         conn = DBConnect.get_connection()
         cursor = conn.cursor(dictionary=True)
         query = """
-            select distinct Product_brand 
-            from go_products gp
-            order by Product_brand asc
-        """
+            select distinct `year` 
+            from appearances a 
+            where `year` >= 1980
+            order by `year` desc
+                """
         cursor.execute(query)
         result = []
         for row in cursor:
-            result.append(row["Product_brand"])
+            result.append(row["year"])
         cursor.close()
         conn.close()
         return result
 
     @staticmethod
-    def getAllNodes(brand):
+    def getAllTeams(anno):
         conn = DBConnect.get_connection()
         cursor = conn.cursor(dictionary=True)
         query = """
-            select Product_number 
-            from go_products gp 
-            where Product_brand = %s
+            select t.teamCode, t.ID , t.name  , sum(s.salary) as salarioSquadra
+            from salaries s, teams t, appearances a 
+            where t.`year` = %s and s.`year` = t.`year`
+                and a.`year` = t.`year`
+                and t.ID = a.teamID 
+                and a.playerID = s.playerID 
+            group by t.teamCode, t.name
         """
-        cursor.execute(query, (brand,))
+        cursor.execute(query, (anno, ))
         result = []
         for row in cursor:
-            result.append(row["Product_number"])
+            result.append(Squadra(**row))
         cursor.close()
         conn.close()
         return result
+
+
 
     @staticmethod
     def getEdge(u, v, anno):

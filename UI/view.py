@@ -32,28 +32,27 @@ class View(ft.UserControl):
         self._page.controls.append(self._title)
 
         self._ddAnno = ft.Dropdown(label="Anno")
+        self._controller.fillDDAnno()
         self.btn_graph = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handle_graph, width=200)
         row1 = ft.Row([self._ddAnno, self.btn_graph], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row1)
         self.txtSquadre = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
         self._page.controls.append(self.txtSquadre)
 
-        self._ddSquadre = ft.Dropdown(label="Album", width=400, disabled=True)
+        self._ddSquadre = ft.Dropdown(label="Squadre", width=400, disabled=True)
 
-        self._btnDettagli = ft.ElevatedButton(text="Analisi componente", disabled=True,
+        self._btnAnalisi = ft.ElevatedButton(text="Analisi componente", disabled=True,
                                               on_click=self._controller.handle_dettagli)
-        self._btnPercorso = ft.ElevatedButton(text="Set di Album", on_click=self._controller.handle_percorso, width=200,
+        self._btnPercorso = ft.ElevatedButton(text="Percorso", on_click=self._controller.handle_percorso, width=200,
                                               disabled=True)
 
-        row2 = ft.Row([self._ddSquadre, self._btnDettagli, self._btnPercorso], alignment=ft.MainAxisAlignment.CENTER)
+        row2 = ft.Row([self._ddSquadre, self._btnAnalisi, self._btnPercorso], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row2)
 
-        self.txt_result1 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
+        self.txt_result1 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
         self._page.controls.append(self.txt_result1)
 
-        # List View where the reply is printed
-        self.txt_result2 = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
-        self._page.controls.append(self.txt_result2)
+
         self._page.update()
 
         self._page.update()
